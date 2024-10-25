@@ -5,69 +5,68 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
+
+	public static void main(String[] args) throws IOException {
+		File f = new File(System.getProperty("user.dir") + File.separator + "resources/output.txt");
+		File newFolder = new File("resources");
+		// Check if folder exist, but it is created
+		if (!newFolder.exists()) {
+			newFolder.mkdir();
+		}
+		// Check if file exists
+		if (!f.exists()) {
+			f.createNewFile();
+		}
 	
+		if (f.canRead()) {
+			readFile(f);
+		} else if (f.canWrite()) {
+			writeFile(f);
+		} else {
+			System.out.println("Error writing in file");
+		}
+	
+	}
+
 	/**
-	 * Leer un fichero y mostrarlo por consola
-	 * */
-	public static void leerFichero(File f) throws IOException {
+	 * Read a file and show by console
+	 */
+	public static void readFile(File f) throws IOException {
 		FileReader fr = new FileReader(f);
 		BufferedReader br = new BufferedReader(fr);
-		String miLinea = br.readLine();
-		while(miLinea != null) {
-			System.out.println(miLinea);
-			miLinea = br.readLine();
+		String line = br.readLine();
+		while (line != null) {
+			System.out.println(line);
+			line = br.readLine();
 		}
 		fr.close();
-		br.close();	
+		br.close();
 	}
+
 	/**
-	 * Escribir un fichero en un array 5 objetos de la clase productos.
-	 * */
-	public static void escribirFichero(File f) throws IOException {
-		//Se puede escribir en el fichero.
-		FileWriter fw = new FileWriter(f,true);
+	 * Write a file with info from an array list
+	 */
+	public static void writeFile(File f) throws IOException {
+		FileWriter fw = new FileWriter(f, true);
 		PrintWriter pw = new PrintWriter(fw);
 		Scanner sc = new Scanner(System.in);
-		ArrayList<Producto> productos = new ArrayList<>();
-		for(int i=0; i<5; i++) {
-			System.out.println("Mi iteración: "+i);
-			System.out.print("Introduzca Nombre del producto: ");
-			String nombreProducto = sc.next();
-			System.out.print("Introduzca Precio del producto: ");
-			float precio = sc.nextFloat();
-			System.out.print("Introduzca Descripción del producto: ");
-			String desc = sc.next();
-			//Añado elementos al array
-			productos.add(new Producto(precio,nombreProducto,desc));
-			//Escribo en el fichero la información de cada producto
-			pw.append(productos.get(i).toString());
+		ArrayList<Product> products = new ArrayList<>();
+		for (int i = 0; i < 5; i++) {
+			System.out.println("Add new product: " + i);
+			System.out.print("Write name: ");
+			String name = sc.next();
+			System.out.print("Write price: ");
+			float price = sc.nextFloat();
+			System.out.print("Write description: ");
+			String description = sc.next();
+			// add products to array list
+			products.add(new Product(price, name, description));
+			// Write data in file
+			pw.append(products.get(i).toString());
 		}
 		pw.close();
 		fw.close();
-		
-	}
-	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
-		File f = new File(System.getProperty("user.dir")+File.separator+"resources/prueba.txt");
-		File newFolder = new File("resources");
-		//Comprobmos si existe el directorio y si no lo creamos
-		if(!newFolder.exists()){
-			newFolder.mkdir();
-		}
-		//Ahora comprobamos si existe el archivo
-		if(!f.exists()) {
-			f.createNewFile();
-		}
-		
-		if(f.canRead()) {
-			leerFichero(f);
-		}else if(f.canWrite()) {
-			escribirFichero(f);
-		}else {
-			System.out.println("NO SE PUEDE ESCRIBIR EN EL ARCHIVO");
-		}
-		
-		
+
 	}
 
 }
